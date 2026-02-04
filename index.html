@@ -1,0 +1,44 @@
+
+ <!DOCTYPE html>
+<html>
+<head>
+<title>For My Husband 💙</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<nav>
+    <a href="index.html">Home</a>
+    <a href="games.html">Games</a>
+    <a href="memories.html">Memories</a>
+    <div id="nav-line"></div>
+</nav>
+
+<div class="page">
+    <h1>Hi Caden 💙</h1>
+    <p>Welcome to your Valentine’s challenge, my husband 😏</p>
+
+    <div id="wink" style="font-size:4rem; cursor:pointer;">😉</div>
+</div>
+
+<script src="nav.js"></script>
+<script>
+const wink = document.getElementById("wink");
+
+wink.onclick = () => {
+    wink.textContent = "😜";
+    for(let i=0;i<8;i++){
+        const h = document.createElement("div");
+        h.className = "heart";
+        h.textContent = "💙";
+        h.style.left = Math.random()*100+"vw";
+        h.style.bottom = "40%";
+        document.body.appendChild(h);
+        setTimeout(()=>h.remove(),4000);
+    }
+    setTimeout(()=>wink.textContent="😉",600);
+};
+</script>
+
+</body>
+</html>

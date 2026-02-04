@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Enter Code</title>
+<style>
+body {
+    background: linear-gradient(135deg, #cfe9ff, #e8f4ff);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    font-family: Poppins;
+}
+.box {
+    background: white;
+    padding: 40px;
+    border-radius: 25px;
+    text-align: center;
+}
+input {
+    padding: 10px;
+    border-radius: 10px;
+    border: 1px solid #ccc;
+}
+button {
+    margin-top: 15px;
+    padding: 10px 25px;
+    border: none;
+    border-radius: 20px;
+    background: #219ebc;
+    color: white;
+    font-weight: bold;
+}
+</style>
+</head>
+<body>
+
+<div class="box">
+    <h2>Enter the Code 💙</h2>
+    <input id="code" placeholder="Secret code">
+    <br>
+    <button onclick="unlock()">Enter</button>
+</div>
+
+<script>
+function unlock(){
+    const code = document.getElementById("code").value;
+    if(code === "2407"){
+        window.location.href = "index.html";
+    } else {
+        alert("Wrong code 😏");
+    }
+}
+</script>
+
+</body>
+</html>

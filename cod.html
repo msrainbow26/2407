@@ -1,0 +1,404 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>COD MODE 🔫</title>
+
+<link rel="stylesheet" href="style.css">
+
+<style>
+/* GAME AREA */
+#game {
+    position: relative;
+    width: 100%;
+    height: 70vh;
+    background: radial-gradient(circle, #dbeeff, #bde0fe);
+    overflow: hidden;
+    cursor: none; /* Changed from crosshair to none for custom scope */
+    border-radius: 20px;
+}
+
+/* HEART TARGETS - Updated for balloon effect */
+.heart-target {
+    position: absolute;
+    font-size: 2.5rem;
+    cursor: pointer;
+    animation: float 4s linear infinite;
+    transition: transform 0.2s ease;
+    z-index: 10;
+}
+
+@keyframes float {
+    50% { transform: translateY(-25px); }
+}
+
+/* BULLET EFFECT */
+.bullet {
+    position: absolute;
+    width: 8px;
+    height: 8px;
+    background: #023047;
+    border-radius: 50%;
+    pointer-events: none;
+    animation: shoot 0.4s linear forwards;
+    z-index: 15;
+}
+
+@keyframes shoot {
+    to { transform: scale(3); opacity: 0; }
+}
+
+/* WIN OVERLAY */
+#winScreen {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.7);
+    display: none;
+    justify-content: center;
+    align-items: center;
+    z-index: 2000;
+}
+
+.win-box {
+    background: white;
+    padding: 30px;
+    border-radius: 25px;
+    text-align: center;
+    max-width: 90%;
+    animation: pop 0.4s ease-out;
+}
+
+@keyframes pop {
+    from { transform: scale(0.7); opacity: 0; }
+    to { transform: scale(1); opacity: 1; }
+}
+
+.win-box img {
+    width: 220px;
+    border-radius: 20px;
+    margin-bottom: 15px;
+}
+
+/* --- NEW SCOPE STYLES --- */
+#scope {
+    position: fixed;
+    width: 80px;
+    height: 80px;
+    pointer-events: none;
+    z-index: 1000;
+    filter: drop-shadow(0 0 5px rgba(0, 0, 0, 0.5));
+    display: none; /* Initially hidden */
+}
+
+.scope-circle {
+    position: absolute;
+    border: 3px solid #ff0000;
+    border-radius: 50%;
+    width: 100%;
+    height: 100%;
+}
+
+.scope-reticle {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+}
+
+.scope-reticle::before,
+.scope-reticle::after {
+    content: '';
+    position: absolute;
+    background: #ff0000;
+}
+
+.scope-reticle::before {
+    width: 3px;
+    height: 20px;
+    left: 50%;
+    top: 0;
+    transform: translateX(-50%);
+}
+
+.scope-reticle::after {
+    width: 20px;
+    height: 3px;
+    top: 50%;
+    left: 0;
+    transform: translateY(-50%);
+}
+
+.scope-dot {
+    position: absolute;
+    width: 6px;
+    height: 6px;
+    background: #ff0000;
+    border-radius: 50%;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+/* --- NEW BALLOON POP ANIMATION --- */
+.pop-effect {
+    position: absolute;
+    width: 60px;
+    height: 60px;
+    pointer-events: none;
+    z-index: 20;
+    background: radial-gradient(circle, #ff6b9d, #ff3d7f);
+    border-radius: 50%;
+    animation: balloon-pop 0.6s ease-out forwards;
+    opacity: 0.9;
+}
+
+@keyframes balloon-pop {
+    0% {
+        transform: scale(0.8);
+        opacity: 1;
+    }
+    50% {
+        transform: scale(1.3);
+        opacity: 0.8;
+    }
+    100% {
+        transform: scale(0);
+        opacity: 0;
+    }
+}
+
+.pop-particles {
+    position: absolute;
+    width: 60px;
+    height: 60px;
+    pointer-events: none;
+    z-index: 20;
+}
+
+.pop-particle {
+    position: absolute;
+    width: 8px;
+    height: 8px;
+    background: #ff3d7f;
+    border-radius: 50%;
+    animation: particle-fly 0.8s ease-out forwards;
+}
+
+@keyframes particle-fly {
+    0% {
+        transform: translate(0, 0) scale(1);
+        opacity: 1;
+    }
+    100% {
+        transform: translate(var(--tx), var(--ty)) scale(0);
+        opacity: 0;
+    }
+}
+
+/* Game instructions */
+.game-instructions {
+    background: rgba(255, 255, 255, 0.9);
+    padding: 10px 15px;
+    border-radius: 10px;
+    margin: 10px auto;
+    max-width: 600px;
+    text-align: center;
+    font-size: 0.9rem;
+    border: 2px solid #023047;
+}
+</style>
+</head>
+
+<body>
+
+<nav>
+    <a href="index.html">Home</a>
+    <a href="games.html">Games</a>
+    <a href="memories.html">Memories</a>
+    <div id="nav-line"></div>
+</nav>
+
+<div class="page">
+    <h2>COD MODE 🔫💙</h2>
+    <p>Aim and eliminate all hearts 😏</p>
+    
+    <div class="game-instructions">
+        <strong>How to play:</strong> Move your mouse to aim the scope. Click to shoot the balloon hearts!
+    </div>
+
+    <p><strong>Hits:</strong> <span id="hits">0</span> / <span id="total">0</span></p>
+
+    <div id="game"></div>
+</div>
+
+<!-- WIN SCREEN -->
+<div id="winScreen">
+    <div class="win-box">
+        <img src="memories/pic4.jpeg" alt="love">
+        <h2>YOU HAVE WON 💙🔥</h2>
+        <p>
+            Use this code to claim your prize 😏<br><br>
+            <strong>"I love you baby"</strong>
+        </p>
+    </div>
+</div>
+
+<!-- --- NEW SCOPE ELEMENT --- -->
+<div id="scope">
+    <div class="scope-circle"></div>
+    <div class="scope-reticle"></div>
+    <div class="scope-dot"></div>
+</div>
+
+<script src="nav.js"></script>
+<script>
+const game = document.getElementById("game");
+const hitsEl = document.getElementById("hits");
+const totalEl = document.getElementById("total");
+const winScreen = document.getElementById("winScreen");
+
+// --- NEW: Get scope element ---
+const scope = document.getElementById("scope");
+
+let hits = 0;
+const totalHearts = 10;
+totalEl.textContent = totalHearts;
+
+// --- NEW: Show scope when mouse enters game area ---
+game.addEventListener('mouseenter', () => {
+    scope.style.display = 'block';
+});
+
+game.addEventListener('mouseleave', () => {
+    scope.style.display = 'none';
+});
+
+// --- NEW: Move scope with mouse ---
+document.addEventListener('mousemove', (e) => {
+    scope.style.left = (e.clientX - 40) + 'px';
+    scope.style.top = (e.clientY - 40) + 'px';
+});
+
+/* SPAWN HEARTS - Updated for balloon effect */
+function spawnHeart() {
+    const heart = document.createElement("div");
+    heart.className = "heart-target";
+    heart.textContent = "💙";
+
+    // Add balloon-like styles
+    heart.style.textShadow = "2px 2px 4px rgba(0,0,0,0.3)";
+    heart.style.transform = "scale(1.2)";
+    
+    heart.style.left = Math.random() * (game.offsetWidth - 50) + "px";
+    heart.style.top = Math.random() * (game.offsetHeight - 50) + "px";
+
+    /* MOVE HEART */
+    const moveInterval = setInterval(() => {
+        heart.style.left = Math.random() * (game.offsetWidth - 50) + "px";
+        heart.style.top = Math.random() * (game.offsetHeight - 50) + "px";
+    }, 1200);
+
+    heart.addEventListener("click", (e) => {
+        e.stopPropagation();
+        clearInterval(moveInterval);
+        
+        // --- NEW: Create balloon pop effect before removing heart ---
+        const heartRect = heart.getBoundingClientRect();
+        const heartX = heartRect.left + heartRect.width / 2;
+        const heartY = heartRect.top + heartRect.height / 2;
+        
+        createBalloonPopEffect(heartX, heartY);
+        
+        // Remove heart after a small delay to see pop effect
+        setTimeout(() => {
+            heart.remove();
+        }, 300);
+
+        hits++;
+        hitsEl.textContent = hits;
+
+        if (hits === totalHearts) {
+            setTimeout(() => {
+                winScreen.style.display = "flex";
+            }, 800);
+        }
+    });
+
+    game.appendChild(heart);
+}
+
+/* --- NEW FUNCTION: Create balloon pop effect --- */
+function createBalloonPopEffect(x, y) {
+    // Create main pop effect
+    const popEffect = document.createElement("div");
+    popEffect.className = "pop-effect";
+    popEffect.style.left = (x - 30) + "px";
+    popEffect.style.top = (y - 30) + "px";
+    document.body.appendChild(popEffect);
+    
+    // Create particles
+    const particles = document.createElement("div");
+    particles.className = "pop-particles";
+    particles.style.left = (x - 30) + "px";
+    particles.style.top = (y - 30) + "px";
+    document.body.appendChild(particles);
+    
+    // Create 8 particles flying in different directions
+    for (let i = 0; i < 8; i++) {
+        const particle = document.createElement("div");
+        particle.className = "pop-particle";
+        
+        // Calculate random direction for particle
+        const angle = (i / 8) * Math.PI * 2;
+        const distance = 40 + Math.random() * 30;
+        const tx = Math.cos(angle) * distance;
+        const ty = Math.sin(angle) * distance;
+        
+        particle.style.setProperty('--tx', tx + 'px');
+        particle.style.setProperty('--ty', ty + 'px');
+        
+        // Random color variation for particles
+        const hue = 330 + Math.random() * 30; // Pink to red hue
+        particle.style.background = `hsl(${hue}, 90%, 60%)`;
+        
+        particles.appendChild(particle);
+    }
+    
+    // Remove effects after animation completes
+    setTimeout(() => {
+        popEffect.remove();
+        particles.remove();
+    }, 800);
+}
+
+/* CREATE ALL HEARTS */
+for (let i = 0; i < totalHearts; i++) {
+    spawnHeart();
+}
+
+/* SHOOT EFFECT - Updated to originate from scope center */
+game.addEventListener("click", (e) => {
+    const bullet = document.createElement("div");
+    bullet.className = "bullet";
+    
+    // Position bullet at scope center (not cursor position)
+    const scopeRect = scope.getBoundingClientRect();
+    const bulletX = scopeRect.left + scopeRect.width / 2;
+    const bulletY = scopeRect.top + scopeRect.height / 2;
+    
+    bullet.style.left = bulletX + "px";
+    bullet.style.top = bulletY + "px";
+    
+    // Add slight recoil animation to scope
+    scope.style.transform = 'scale(0.9)';
+    setTimeout(() => {
+        scope.style.transform = 'scale(1)';
+    }, 100);
+    
+    document.body.appendChild(bullet);
+    setTimeout(() => bullet.remove(), 400);
+});
+</script>
+
+</body>
+</html>

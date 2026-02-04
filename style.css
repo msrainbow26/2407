@@ -1,0 +1,109 @@
+body {
+    margin: 0;
+    font-family: Poppins, sans-serif;
+    background: linear-gradient(135deg, #cfe9ff, #e8f4ff);
+    color: #023047;
+}
+
+/* NAV BAR */
+nav {
+    position: fixed;
+    top: 0;
+    width: 100%;
+    background: rgba(255,255,255,0.6);
+    backdrop-filter: blur(12px);
+    display: flex;
+    justify-content: space-around;
+    padding: 15px 0;
+    z-index: 1000;
+}
+
+nav a {
+    text-decoration: none;
+    color: #023047;
+    font-weight: 600;
+    position: relative;
+}
+
+#nav-line {
+    position: absolute;
+    bottom: 0;
+    height: 4px;
+    width: 60px;
+    background: #219ebc;
+    border-radius: 5px;
+    box-shadow: 0 0 15px #219ebc;
+    transition: left 0.3s, width 0.3s;
+}
+
+.page {
+    padding-top: 120px;
+    text-align: center;
+}
+
+/* CARDS */
+.card {
+    background: white;
+    margin: 30px auto;
+    padding: 30px;
+    border-radius: 25px;
+    width: 85%;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+    text-align: center;
+}
+
+/* GAME CARDS */
+.game-card {
+    background: white;
+    border-radius: 25px;
+    padding: 30px;
+    margin: 25px auto;
+    width: 85%;
+    font-weight: 600;
+    text-decoration: none;
+    color: #023047;
+    display: block;
+    box-shadow: 0 15px 35px rgba(33,158,188,.25);
+}
+
+/* INPUTS + BUTTONS */
+input {
+    padding: 14px;
+    width: 80%;
+    border-radius: 30px;
+    border: 2px solid #8ecae6;
+    font-size: 1rem;
+}
+
+button {
+    background: linear-gradient(135deg, #219ebc, #8ecae6);
+    color: white;
+    border: none;
+    padding: 14px 28px;
+    margin: 10px;
+    border-radius: 30px;
+    font-weight: 600;
+}
+
+/* CANVAS */
+canvas {
+    display: block;
+    margin: 30px auto;
+    border-radius: 20px;
+    background: radial-gradient(circle at top, #f1f9ff, #cfe9ff);
+    box-shadow: 0 15px 40px rgba(33,158,188,0.25);
+}
+
+/* FLOATING HEARTS */
+.heart {
+    position: fixed;
+    font-size: 1.5rem;
+    animation: floatUp 4s linear forwards;
+}
+
+@keyframes floatUp {
+    to {
+        transform: translateY(-150px);
+        opacity: 0;
+    }
+}

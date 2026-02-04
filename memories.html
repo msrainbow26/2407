@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Our Memories 💙</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        .memory-container {
+            position: relative;
+            width: 100%;
+            height: 100vh;
+            overflow: hidden;
+            background: linear-gradient(135deg, #cfe9ff, #e8f4ff);
+        }
+
+        video, img {
+            max-width: 80%;
+            max-height: 70%;
+            border-radius: 25px;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            object-fit: cover;
+            box-shadow: 0 15px 40px rgba(33,158,188,0.25);
+        }
+
+        .love-message {
+            position: absolute;
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: #ff5fa2;
+            text-shadow: 0 0 5px #fff;
+            animation: floatMessage 10s linear infinite;
+        }
+
+        @keyframes floatMessage {
+            0% { transform: translateY(100vh) rotate(0deg); opacity: 0; }
+            50% { opacity: 1; }
+            100% { transform: translateY(-20vh) rotate(20deg); opacity: 0; }
+        }
+    </style>
+</head>
+<body>
+
+<nav>
+    <a href="index.html">Home</a>
+    <a href="games.html">Games</a>
+    <a href="memories.html">Memories</a>
+    <div id="nav-line"></div>
+</nav>
+
+<div class="memory-container" id="memoryContainer">
+    <!-- Images and videos will appear here -->
+</div>
+
+<script src="nav.js"></script>
+<script>
+const container = document.getElementById("memoryContainer");
+
+// Folder of images/videos
+const mediaFiles = [
+ {type: "video", src: "memories/vid1.mp4"}, // 16 seconds
+ 
+    {type: "img", src: "memories/pic1.jpeg"},
+ {type: "video", src: "memories/vid2.mp4"}, // 3 seconds
+	
+    {type: "img", src: "memories/pic2.jpeg"},
+    {type: "img", src: "memories/pic3.jpeg"},
+ {type: "video", src: "memories/vid3.mp4"}, // 8 seconds
+ {type: "video", src: "memories/vid4.mp4"}, // 3 seconds
+ {type: "video", src: "memories/vid5.mp4"}, // 2 seconds
+ {type: "video", src: "memories/vid6.mp4"}, // 8 seconds
+ {type: "video", src: "memories/vid7.mp4"}, // 9 seconds
+ 
+
+];
+
+// Love messages
+const messages = [
+    "You are mine 💙",
+    "Forever my husband 😏",
+    "Every moment with you is magic ✨",
+    "My heart beats for you 💓",
+    "You complete me 💞",
+    "Together, always 🥰"
+];
+
+let currentIndex = 0;
+
+function showMedia() {
+    container.innerHTML = "";
+    const media = mediaFiles[currentIndex];
+    let element;
+
+    if(media.type === "img"){
+        element = document.createElement("img");
+        element.src = media.src;
+
+        container.appendChild(element);
+        currentIndex = (currentIndex + 1) % mediaFiles.length;
+
+        // Switch image after 8s
+        setTimeout(showMedia, 8000);
+
+    } else if(media.type === "video"){
+        element = document.createElement("video");
+        element.src = media.src;
+        element.autoplay = true;
+        element.loop = false; // don't loop individual video
+        element.muted = true;
+
+        container.appendChild(element);
+
+        // When video ends, move to next
+        element.onended = () => {
+            currentIndex = (currentIndex + 1) % mediaFiles.length;
+            showMedia();
+        };
+    }
+}
+
+// Start
+showMedia();
+
+// Floating love messages
+function spawnMessage() {
+    const msg = document.createElement("div");
+    msg.className = "love-message";
+    msg.style.left = Math.random() * 80 + "%";
+    msg.style.fontSize = (14 + Math.random()*12) + "px";
+    msg.innerText = messages[Math.floor(Math.random() * messages.length)];
+    container.appendChild(msg);
+
+    setTimeout(() => container.removeChild(msg), 10000);
+}
+
+// Spawn a message every 2 seconds
+setInterval(spawnMessage, 2000);
+</script>
+
+</body>
+</html>

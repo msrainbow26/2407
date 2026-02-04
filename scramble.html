@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Love Scramble</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<nav>
+  <a href="index.html">Home</a>
+  <a href="games.html">Games</a>
+  <div id="nav-line"></div>
+</nav>
+
+<div class="card">
+  <h2>Love Scramble 💙</h2>
+  <p id="riddle"></p>
+  <p id="hint" class="hint"></p>
+
+  <input id="answer" placeholder="Type your answer">
+  <button onclick="check()">Submit</button>
+  <button onclick="showHint()">Hint 💡</button>
+
+  <div id="words"></div>
+</div>
+
+<script>
+const riddles = [
+ {q:"This word refers to you 😉", a:"you", h:"Literally YOU"},
+ {q:"What connects you to me?", a:"are", h:"Present tense"},
+ {q:"You belong to me 😏", a:"mine", h:"Possessive"},
+ {q:"Means always ♾️", a:"forever", h:"Never ending"},
+ {q:"What I call you 💍", a:"husband", h:"Future already"},
+ {q:"Three magical words ❤️", a:"i love you", h:"Say it"}
+];
+
+let i=0;
+document.getElementById("riddle").innerText=riddles[i].q;
+
+function showHint(){
+ document.getElementById("hint").innerText=riddles[i].h;
+}
+
+function check(){
+ let v=document.getElementById("answer").value.toLowerCase();
+ if(v===riddles[i].a){
+   document.getElementById("words").innerHTML+=`<span>${riddles[i].a}</span>`;
+   i++;
+   document.getElementById("answer").value="";
+   document.getElementById("hint").innerText="";
+   if(i<riddles.length){
+     document.getElementById("riddle").innerText=riddles[i].q;
+   } else {
+     localStorage.setItem("scrambleWin","yes");
+     location.href="unlock.html";
+   }
+ }
+}
+</script>
+
+<script src="nav.js"></script>
+</body>
+</html>
