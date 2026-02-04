@@ -108,40 +108,4 @@ canvas {
     }
 
 }
-/* Make images and videos responsive */
-img, video {
-    max-width: 100%;   /* never exceed container width */
-    height: auto;      /* maintain aspect ratio */
-    object-fit: cover; /* fill container nicely */
-}
 
-/* Make cards responsive */
-.card {
-    width: 90%;         /* adapt to screen width */
-    max-width: 600px;   /* optional max size for big screens */
-    margin: 20px auto;
-    padding: 20px;
-    box-sizing: border-box;
-}
-
-/* Make text scale reasonably */
-body, h1, h2, h3, p {
-    font-size: calc(14px + 0.5vw); /* text grows/shrinks with screen width */
-}
-
-/* Memories container full screen */
-.memory-container {
-    width: 100vw;
-    height: 100vh;
-}
-
-/* Optional: make nav bar responsive */
-nav {
-    flex-wrap: wrap;      /* wrap links if screen too small */
-    padding: 10px 5px;
-}
-
-nav a {
-    font-size: calc(12px + 0.5vw);
-    margin: 5px;
-}
