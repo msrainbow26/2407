@@ -24,6 +24,35 @@
             box-shadow: 0 15px 40px rgba(33,158,188,0.25);
         }
 
+        /* 🔽 NEW: Gallery Styles */
+        .gallery {
+            padding: 40px 20px;
+            background: #f7fbff;
+        }
+
+        .gallery h2 {
+            text-align: center;
+            color: #219ebc;
+            margin-bottom: 20px;
+        }
+
+        .gallery-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+            gap: 15px;
+        }
+
+        .gallery-grid img,
+        .gallery-grid video {
+            width: 100%;
+            height: 150px;
+            object-fit: cover;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            position: static;
+            transform: none;
+        }
+
         .love-message {
             position: absolute;
             font-size: 1.2rem;
@@ -49,33 +78,38 @@
     <div id="nav-line"></div>
 </nav>
 
-<div class="memory-container" id="memoryContainer">
-    <!-- Images and videos will appear here -->
+<!-- 🔝 Featured Display -->
+<div class="memory-container" id="memoryContainer"></div>
+
+<!-- 🔽 NEW: Gallery Section -->
+<div class="gallery">
+    <h2>Our Full Gallery 💙</h2>
+    <div class="gallery-grid" id="galleryGrid"></div>
 </div>
 
 <script src="nav.js"></script>
 <script>
 const container = document.getElementById("memoryContainer");
+const galleryGrid = document.getElementById("galleryGrid");
 
-// Folder of images/videos
+// Media list (🔽 ADD MORE HERE anytime)
 const mediaFiles = [
- {type: "video", src: "memories/vid1.mp4"}, // 16 seconds
- 
+    {type: "video", src: "memories/vid1.mp4"},
     {type: "img", src: "memories/pic1.jpeg"},
- {type: "video", src: "memories/vid2.mp4"}, // 3 seconds
-	
+    {type: "video", src: "memories/vid2.mp4"},
     {type: "img", src: "memories/pic2.jpeg"},
     {type: "img", src: "memories/pic3.jpeg"},
- {type: "video", src: "memories/vid3.mp4"}, // 8 seconds
- {type: "video", src: "memories/vid4.mp4"}, // 3 seconds
- {type: "video", src: "memories/vid5.mp4"}, // 2 seconds
- {type: "video", src: "memories/vid6.mp4"}, // 8 seconds
- {type: "video", src: "memories/vid7.mp4"}, // 9 seconds
- 
+    {type: "video", src: "memories/vid3.mp4"},
+    {type: "video", src: "memories/vid4.mp4"},
+    {type: "video", src: "memories/vid5.mp4"},
+    {type: "video", src: "memories/vid6.mp4"},
+    {type: "video", src: "memories/vid7.mp4"},
 
+    // 🔽 PLACEHOLDERS (just replace src later)
+    {type: "img", src: "memories/placeholder1.jpg"},
+    {type: "video", src: "memories/placeholder2.mp4"},
 ];
 
-// Love messages
 const messages = [
     "You are mine 💙",
     "Forever my husband 😏",
@@ -87,6 +121,7 @@ const messages = [
 
 let currentIndex = 0;
 
+// 🔝 Featured loop display
 function showMedia() {
     container.innerHTML = "";
     const media = mediaFiles[currentIndex];
@@ -95,23 +130,19 @@ function showMedia() {
     if(media.type === "img"){
         element = document.createElement("img");
         element.src = media.src;
-
         container.appendChild(element);
-        currentIndex = (currentIndex + 1) % mediaFiles.length;
 
-        // Switch image after 8s
+        currentIndex = (currentIndex + 1) % mediaFiles.length;
         setTimeout(showMedia, 8000);
 
-    } else if(media.type === "video"){
+    } else {
         element = document.createElement("video");
         element.src = media.src;
         element.autoplay = true;
-        element.loop = false; // don't loop individual video
         element.muted = true;
 
         container.appendChild(element);
 
-        // When video ends, move to next
         element.onended = () => {
             currentIndex = (currentIndex + 1) % mediaFiles.length;
             showMedia();
@@ -119,10 +150,29 @@ function showMedia() {
     }
 }
 
-// Start
-showMedia();
+// 🔽 NEW: Populate gallery
+function loadGallery() {
+    mediaFiles.forEach(media => {
+        let el;
 
-// Floating love messages
+        if(media.type === "img"){
+            el = document.createElement("img");
+            el.src = media.src;
+        } else {
+            el = document.createElement("video");
+            el.src = media.src;
+            el.controls = true;
+        }
+
+        galleryGrid.appendChild(el);
+    });
+}
+
+// Start everything
+showMedia();
+loadGallery();
+
+// Floating messages
 function spawnMessage() {
     const msg = document.createElement("div");
     msg.className = "love-message";
@@ -134,7 +184,6 @@ function spawnMessage() {
     setTimeout(() => container.removeChild(msg), 10000);
 }
 
-// Spawn a message every 2 seconds
 setInterval(spawnMessage, 2000);
 </script>
 
