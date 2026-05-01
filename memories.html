@@ -3,7 +3,14 @@
 <head>
     <title>Our Memories 💙</title>
     <link rel="stylesheet" href="style.css">
+
     <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+        }
+
+        /* 🔝 Featured Section */
         .memory-container {
             position: relative;
             width: 100%;
@@ -24,51 +31,80 @@
             box-shadow: 0 15px 40px rgba(33,158,188,0.25);
         }
 
-        /* 🔽 NEW: Gallery Styles */
+        /* 🔽 Gallery */
         .gallery {
-            padding: 40px 20px;
+            padding: 30px 8px;
             background: #f7fbff;
         }
 
         .gallery h2 {
             text-align: center;
             color: #219ebc;
-            margin-bottom: 20px;
+            margin-bottom: 15px;
+            font-size: 1.5rem;
         }
 
         .gallery-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
-            gap: 15px;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 8px;
+        }
+
+        @media (min-width: 600px) {
+            .gallery-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+
+        @media (min-width: 900px) {
+            .gallery-grid {
+                grid-template-columns: repeat(5, 1fr);
+            }
         }
 
         .gallery-grid img,
         .gallery-grid video {
             width: 100%;
-            height: 150px;
+            aspect-ratio: 3/4;
             object-fit: cover;
-            border-radius: 15px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            border-radius: 6px;
+            cursor: pointer;
+            transition: 0.25s ease;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.12);
             position: static;
             transform: none;
         }
 
-        .love-message {
-            position: absolute;
-            font-size: 1.2rem;
-            font-weight: 600;
-            color: #ff5fa2;
-            text-shadow: 0 0 5px #fff;
-            animation: floatMessage 10s linear infinite;
+        .gallery-grid img:hover,
+        .gallery-grid video:hover {
+            transform: scale(1.04);
+            box-shadow: 0 0 18px rgba(33,158,188,0.8),
+                        0 0 30px rgba(33,158,188,0.4);
         }
 
-        @keyframes floatMessage {
-            0% { transform: translateY(100vh) rotate(0deg); opacity: 0; }
-            50% { opacity: 1; }
-            100% { transform: translateY(-20vh) rotate(20deg); opacity: 0; }
+        /* 🔳 Fullscreen */
+        #fullscreenViewer {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.9);
+            justify-content: center;
+            align-items: center;
+            z-index: 999;
+        }
+
+        #fullscreenViewer img,
+        #fullscreenViewer video {
+            max-width: 95%;
+            max-height: 95%;
+            border-radius: 12px;
         }
     </style>
 </head>
+
 <body>
 
 <nav>
@@ -78,21 +114,30 @@
     <div id="nav-line"></div>
 </nav>
 
-<!-- 🔝 Featured Display -->
 <div class="memory-container" id="memoryContainer"></div>
 
-<!-- 🔽 NEW: Gallery Section -->
 <div class="gallery">
     <h2>Our Full Gallery 💙</h2>
     <div class="gallery-grid" id="galleryGrid"></div>
 </div>
 
+<div id="fullscreenViewer"></div>
+
+<!-- 🔊 FIXED AUDIO -->
+<audio id="bgMusic" loop preload="auto">
+    <source src="memories/music.mp3" type="audio/mpeg">
+</audio>
+
 <script src="nav.js"></script>
+
 <script>
 const container = document.getElementById("memoryContainer");
 const galleryGrid = document.getElementById("galleryGrid");
+const viewer = document.getElementById("fullscreenViewer");
+const music = document.getElementById("bgMusic");
 
-// Media list (🔽 ADD MORE HERE anytime)
+music.volume = 0.5;
+
 const mediaFiles = [
     {type: "video", src: "memories/vid1.mp4"},
     {type: "img", src: "memories/pic1.jpeg"},
@@ -104,24 +149,36 @@ const mediaFiles = [
     {type: "video", src: "memories/vid5.mp4"},
     {type: "video", src: "memories/vid6.mp4"},
     {type: "video", src: "memories/vid7.mp4"},
-
-    // 🔽 PLACEHOLDERS (just replace src later)
-    {type: "img", src: "memories/placeholder1.jpg"},
-    {type: "video", src: "memories/placeholder2.mp4"},
-];
-
-const messages = [
-    "You are mine 💙",
-    "Forever my husband 😏",
-    "Every moment with you is magic ✨",
-    "My heart beats for you 💓",
-    "You complete me 💞",
-    "Together, always 🥰"
+	{type: "video", src: "memories/vid8.mp4"},
+	{type: "video", src: "memories/vid9.mp4"},
+	{type: "img", src: "memories/pic4a.jpg"},
+	{type: "img", src: "memories/pic5.jpg"},
+	{type: "img", src: "memories/pic6.jpg"},
+	{type: "video", src: "memories/vid10.mp4"},
+	{type: "video", src: "memories/vid11.mp4"},
+	{type: "img", src: "memories/pic7.jpg"},
+	{type: "img", src: "memories/pic8.jpg"},
+	{type: "img", src: "memories/pic9.jpg"},
+	{type: "img", src: "memories/pic10.jpg"},
+	{type: "img", src: "memories/pic11.jpg"},
+	{type: "video", src: "memories/vid12.mp4"},
+	{type: "video", src: "memories/vid13.mp4"},
+	{type: "video", src: "memories/vid14.mp4"},
+	{type: "video", src: "memories/vid15.mp4"},
+	{type: "video", src: "memories/vid16.mp4"},
+	{type: "img", src: "memories/pic12.jpg"},
+	{type: "img", src: "memories/pic13.jpg"},
+	{type: "img", src: "memories/pic14.jpg"},
+	{type: "video", src: "memories/vid17.mp4"},
+	{type: "video", src: "memories/vid18.mp4"},
+	{type: "img", src: "memories/pic15.jpg"},
+	{type: "img", src: "memories/pic16.jpg"},
+	{type: "img", src: "memories/pic17.jpg"},
 ];
 
 let currentIndex = 0;
 
-// 🔝 Featured loop display
+/* 🔝 Featured slideshow */
 function showMedia() {
     container.innerHTML = "";
     const media = mediaFiles[currentIndex];
@@ -130,6 +187,7 @@ function showMedia() {
     if(media.type === "img"){
         element = document.createElement("img");
         element.src = media.src;
+
         container.appendChild(element);
 
         currentIndex = (currentIndex + 1) % mediaFiles.length;
@@ -150,41 +208,67 @@ function showMedia() {
     }
 }
 
-// 🔽 NEW: Populate gallery
+/* 🔽 Gallery */
 function loadGallery() {
     mediaFiles.forEach(media => {
         let el;
 
         if(media.type === "img"){
             el = document.createElement("img");
-            el.src = media.src;
         } else {
             el = document.createElement("video");
-            el.src = media.src;
-            el.controls = true;
+            el.autoplay = true;
+            el.loop = true;
+            el.muted = true;
         }
 
+        el.src = media.src;
+
+        el.onclick = () => openFullscreen(media);
         galleryGrid.appendChild(el);
     });
 }
 
-// Start everything
-showMedia();
-loadGallery();
+/* 🔳 Fullscreen */
+function openFullscreen(media) {
+    viewer.innerHTML = "";
+    viewer.style.display = "flex";
 
-// Floating messages
-function spawnMessage() {
-    const msg = document.createElement("div");
-    msg.className = "love-message";
-    msg.style.left = Math.random() * 80 + "%";
-    msg.style.fontSize = (14 + Math.random()*12) + "px";
-    msg.innerText = messages[Math.floor(Math.random() * messages.length)];
-    container.appendChild(msg);
+    let el;
 
-    setTimeout(() => container.removeChild(msg), 10000);
+    if(media.type === "img"){
+        el = document.createElement("img");
+    } else {
+        el = document.createElement("video");
+        el.autoplay = true;
+        el.controls = true;
+        el.loop = true;
+    }
+
+    el.src = media.src;
+    viewer.appendChild(el);
 }
 
-setInterval(spawnMessage, 2000);
+viewer.onclick = () => {
+    viewer.style.display = "none";
+};
+
+/* 🔊 FIXED MUSIC START (RELIABLE) */
+function startMusic() {
+    music.play().catch(err => {
+        console.log("Autoplay blocked:", err);
+    });
+
+    document.removeEventListener("click", startMusic);
+    document.removeEventListener("touchstart", startMusic);
+}
+
+document.addEventListener("click", startMusic);
+document.addEventListener("touchstart", startMusic);
+
+/* 🚀 Start page */
+showMedia();
+loadGallery();
 </script>
 
 </body>
